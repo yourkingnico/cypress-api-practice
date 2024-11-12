@@ -1,7 +1,24 @@
 describe('Weather API tests', () => {
     const baseUrl = 'https://api.open-meteo.com/v1/forecast';
 
-    it('should get weather for Los Angeles with valid lat/long', () => {
+    const cities = [
+        { name: 'Los Angeles', lat: 34.054245, long: -118.26599 },
+        { name: 'New York', lat: 40.710335, long: -73.99309 },
+        { name: 'Tokyo', lat: 35.7, long: 139.6875 },
+    ];
+
+    cities.forEach(city => {
+        it(`should fetch weather data with correct lat/long for ${city.name}`, () => {
+            cy.request(`${baseUrl}?latitude=${city.lat}&longitude=${city.long}&hourly=temperature_2m`)
+            .then((response) => {
+                expect(response.status).to.eq(200);
+                expect(response.body.latitude).to.eq(city.lat);
+                expect(response.body.longitude).to.eq(city.long);
+            });
+        });
+    });
+
+    it('should get all weather data for Los Angeles with valid lat/long', () => {
 
         // data for downtown Los Angeles
         const lat = 34.054245;
@@ -94,7 +111,7 @@ describe('Weather API tests', () => {
         });
     })
 
-    it.only('should return errors for invalid http method DELETE', () => {
+    it('should return errors for invalid http method DELETE', () => {
 
         const lat = 34.054245;
         const long = -118.26599;
