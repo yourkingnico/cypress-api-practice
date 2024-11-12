@@ -1,0 +1,17 @@
+[
+    {
+      "name": "Los Angeles",
+      "latitude": 34.054245,
+      "longitude": -118.26599
+    },
+    {
+      "name": "New York",
+      "latitude": 40.710335,
+      "longitude": -73.99309
+    },
+    {
+      "name": "Tokyo",
+      "latitude": 35.7,
+      "longitude": 139.6875
+    }
+  ]

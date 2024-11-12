@@ -1,20 +1,21 @@
 describe('Weather API tests', () => {
     const baseUrl = 'https://api.open-meteo.com/v1/forecast';
 
-    const cities = [
-        { name: 'Los Angeles', lat: 34.054245, long: -118.26599 },
-        { name: 'New York', lat: 40.710335, long: -73.99309 },
-        { name: 'Tokyo', lat: 35.7, long: 139.6875 },
-    ];
+    before(() => {
+        cy.fixture('cities').as('cities');
+    });
 
-    cities.forEach(city => {
-        it(`should fetch weather data with correct lat/long for ${city.name}`, () => {
-            cy.request(`${baseUrl}?latitude=${city.lat}&longitude=${city.long}&hourly=temperature_2m`)
-            .then((response) => {
-                expect(response.status).to.eq(200);
-                expect(response.body.latitude).to.eq(city.lat);
-                expect(response.body.longitude).to.eq(city.long);
-            });
+    it('should fetch weather data for each city in the cities.json fixture', function () {
+
+        this.cities.forEach((city) => {
+            cy.request(`${baseUrl}?latitude=${city.latitude}&longitude=${city.longitude}&hourly=temperature_2m`)
+                .then((response) => {
+                    expect(response.status).to.eq(200);
+                    expect(response.body.latitude).to.eq(city.latitude);
+                    expect(response.body.longitude).to.eq(city.longitude);
+                    expect(response.body).to.have.property('hourly');
+                    expect(response.body.hourly).to.have.property('temperature_2m');
+                });
         });
     });
 
